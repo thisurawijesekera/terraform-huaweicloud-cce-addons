@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/compare/v1.0.0...v1.1.0) (2023-04-20)
+
+
+### Features
+
+* Add Add-on Nginx Ingress ([#2](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/issues/2)) ([2da1ef9](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/commit/2da1ef9e4a14e8385b0d9f731e37f484af7b4f50))
+
 ## 1.0.0 (2023-04-19)
 
 
