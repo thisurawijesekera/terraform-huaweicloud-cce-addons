@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/compare/v1.1.0...v1.2.0) (2024-04-18)
+
+
+### Features
+
+* Update version of tf and providers ([#6](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/issues/6)) ([5a68fd8](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/commit/5a68fd8afe19d71c2e6a76bea357597aea19e968))
+
 ## [1.1.0](https://github.com/cloud-labs-infra/terraform-huaweicloud-cce-addons/compare/v1.0.0...v1.1.0) (2023-04-20)
 
 
