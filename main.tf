@@ -56,17 +56,25 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
         defaultBackendService : var.nginx_ingress_default_backend.service
         headers : {}
         service : {
-          loadBalancerIP: ""
+          # Add the ELB ID if available, otherwise, configure auto-create correctly
+          loadBalancerIP: var.nginx_ingress_loadbalancer_ip
           annotations : merge(
-            { for id in [var.nginx_ingress_elb_id] : "kubernetes.io/elb.id" => id if id != null },
+            { 
+              for id in [var.nginx_ingress_elb_id] : 
+                "kubernetes.io/elb.id" => id if id != null 
+            },
             (var.nginx_ingress_elb_id == null ? {
-              "kubernetes.io/elb.autocreate" : format("%#v", merge(
-                { for k, v in var.nginx_ingress_elb_auto_create : k => v },
-                { for name in [format("bandwidth-cce-%s", var.cluster_id)] : "bandwidth_name" => name },
-                { for name in [format("%s-nlb-%s", data.huaweicloud_cce_cluster.cluster.name, var.nginx_ingress_elb_auto_create.type)] : "name" => name },
-                { for zone in [slice(data.huaweicloud_availability_zones.zones.names, 0, var.nginx_ingress_elb_auto_create_az_number)] : "available_zone" => zone
-                if length(var.nginx_ingress_elb_auto_create.available_zone) == 0 },
-              ))
+              "kubernetes.io/elb.autocreate" : jsonencode({
+                available_zone       = [var.nginx_ingress_elb_auto_create.available_zone],
+                bandwidth_chargemode = var.nginx_ingress_elb_auto_create.bandwidth_chargemode,
+                bandwidth_name       = format("bandwidth-cce-%s", var.cluster_id),
+                bandwidth_sharetype  = var.nginx_ingress_elb_auto_create.bandwidth_sharetype,
+                bandwidth_size       = var.nginx_ingress_elb_auto_create.bandwidth_size,
+                eip_type             = var.nginx_ingress_elb_auto_create.eip_type,
+                l4_flavor_name       = var.nginx_ingress_elb_auto_create.l4_flavor_name,
+                name                 = format("%s-nlb-%s", data.huaweicloud_cce_cluster.cluster.name, var.nginx_ingress_elb_auto_create.type),
+                type                 = var.nginx_ingress_elb_auto_create.type
+              })
             } : {}),
             var.nginx_ingress_extra_annotations
           )
