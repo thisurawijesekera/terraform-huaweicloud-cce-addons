@@ -125,3 +125,9 @@ variable "nginx_ingress_default_backend" {
   })
   default = {}
 }
+
+variable "nginx_ingress_loadbalancer_ip" {
+  description = "Optional LoadBalancer IP for the Nginx Ingress service. Leave empty if not manually assigning."
+  type        = string
+  default     = ""
+}
