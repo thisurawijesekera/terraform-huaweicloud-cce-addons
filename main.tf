@@ -62,7 +62,7 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
             (var.nginx_ingress_elb_id == null ? {
               "kubernetes.io/elb.autocreate" : format("%#v", merge(
                 { for k, v in var.nginx_ingress_elb_auto_create : k => v },
-                { for name in [format("bandwidth-cce-%s", var.cluster_id)] : "bandwidth_name" => name },
+                { for name in [format("cce-bandwidth-%s", var.cluster_id)] : "bandwidth_name" => name },
                 { for name in [format("%s-nlb-%s", data.huaweicloud_cce_cluster.cluster.name, var.nginx_ingress_elb_auto_create.type)] : "name" => name },
                 { for zone in [slice(data.huaweicloud_availability_zones.zones.names, 0, var.nginx_ingress_elb_auto_create_az_number)] : "available_zone" => zone
                 if length(var.nginx_ingress_elb_auto_create.available_zone) == 0 },
