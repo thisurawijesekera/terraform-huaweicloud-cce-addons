@@ -56,6 +56,7 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
         defaultBackendService : var.nginx_ingress_default_backend.service
         headers : {}
         service : {
+          loadBalancerIP: ""
           annotations : merge(
             { for id in [var.nginx_ingress_elb_id] : "kubernetes.io/elb.id" => id if id != null },
             (var.nginx_ingress_elb_id == null ? {
