@@ -69,6 +69,7 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
             } : {}),
             var.nginx_ingress_extra_annotations
           )
+          type: LoadBalancer
         }
         tcp : {}
         udp : {}
