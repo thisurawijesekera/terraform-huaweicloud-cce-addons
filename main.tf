@@ -53,18 +53,23 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
           enabled = var.nginx_ingress_default_backend.enable
         }
         defaultBackendService : var.nginx_ingress_default_backend.service
-        headers : {}
         service : {
           annotations : merge(
             { for id in [var.nginx_ingress_elb_id] : "kubernetes.io/elb.id" => id if id != null },
             (var.nginx_ingress_elb_id == null ? {
-              "kubernetes.io/elb.autocreate": format("%#v", merge(
-                { for k, v in var.nginx_ingress_elb_auto_create : k => v },
-                { for name in [format("cce-bandwidth-%s", var.cluster_id)] : "bandwidth_name" => name },
-                { for name in [format("%s-nlb-%s", data.huaweicloud_cce_cluster.cluster.name, var.nginx_ingress_elb_auto_create.type)] : "name" => name },
-                { for zone in [slice(data.huaweicloud_availability_zones.zones.names, 0, var.nginx_ingress_elb_auto_create_az_number)] : "available_zone" => zone
-                if length(var.nginx_ingress_elb_auto_create.available_zone) == 0 },
-              ))
+              "kubernetes.io/elb.autocreate" : jsonencode(
+                {
+                  type                 = "public",
+                  bandwidth_name       = format("cce-bandwidth-%s", var.cluster_id),
+                  bandwidth_chargemode = "bandwidth",
+                  bandwidth_size       = 5,
+                  bandwidth_sharetype  = "PER",
+                  eip_type             = "5_bgp",
+                  available_zone       = [ "ap-southeast-3a" ],
+                  l4_flavor_name       = "L4_flavor.elb.s1.small"
+                }
+              ),
+              "kubernetes.io/elb.lb-algorithm" : "ROUND_ROBIN"
             } : {}),
             var.nginx_ingress_extra_annotations
           )
@@ -92,3 +97,4 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
     )
   }
 }
+
