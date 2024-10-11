@@ -46,8 +46,7 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
   template_name = "nginx-ingress"
   version       = var.nginx_ingress_version
   values {
-    basic_json = jsonencode({})
-    custom_json = jsonencode(
+    basic_json = jsonencode(
       {
         config : var.nginx_ingress_config
         defaultBackend : {
@@ -74,6 +73,7 @@ resource "huaweicloud_cce_addon" "nginx_ingress" {
         udp : {}
       }
     )
+    custom_json = jsonencode({})
     flavor_json = jsonencode(
       {
         "description" : "An nginx Ingress controller that uses ConfigMap to store the nginx configuration.",
